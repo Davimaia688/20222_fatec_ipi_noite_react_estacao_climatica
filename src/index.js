@@ -5,7 +5,7 @@ import React from 'react'
 
 class App extends React.Component{
 
-    renderg() {
+    render() {
         return (
             <div>
                 Meu App
