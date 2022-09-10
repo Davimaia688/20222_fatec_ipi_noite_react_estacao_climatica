@@ -47,6 +47,13 @@ class App extends React.Component{
 
 }
 
+icones = {
+    "Primavera" : "fa-flower",
+    "Verao" : "fa-sun",
+    "Outono" : "fa-tree",
+    "Inverno" : "fa-snowflake"
+}
+
 ReactDOM.render(
     <App/>,
     document.querySelector('#root')
