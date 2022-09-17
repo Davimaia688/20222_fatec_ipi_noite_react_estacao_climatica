@@ -6,7 +6,7 @@ class App extends React.Component{
   
   constructor(props){
     super(props)
-    console.log(constructor)
+    console.log('construtor')
     this.state = {
       latitude: null,
       longitude: null,
@@ -15,6 +15,7 @@ class App extends React.Component{
       icone: null,
       mensagemDeErro: null
     }
+    
   }
 
   obterEstacao = (data, latitude) => {
@@ -44,7 +45,8 @@ class App extends React.Component{
     "Inverno": "fa-snowman"  
   }
 
-  obterLocalizacao = () =>{
+
+  obterLocalizacao = () => {
     window.navigator.geolocation.getCurrentPosition(
       (position) => {
         let data = new Date()
@@ -56,13 +58,25 @@ class App extends React.Component{
           data: data.toLocaleString(),
           estacao: estacao,
           icone: icone
-        }) 
+        })  
       },
       (err) => {
         console.log(err)
         this.setState({mensagemDeErro: 'Tente novamente mais tarde'})
       }
     )
+  }
+
+  componentDidMount(){
+    console.log("componentDidMount")
+  }
+
+  componentDidUpdate(){
+    console.log("componentDidUpdate")
+  }
+
+  componentWillUnmount(){
+    console.log("componentWillUnmount")
   }
   
   render(){
@@ -88,30 +102,32 @@ class App extends React.Component{
                 {/* div>p.text-center */}
                 <div>
                   <p className="text-center">
-                        {
-                        this.state.latitude ?
-                            `Coordenadas: ${this.state.latitude}, ${this.state.longitude}. Data: ${this.state.data}.`
-                        :
-                            this.state.mensagemDeErro ?
-                            `${this.state.mensagemDeErro}`
-                        :
-                            `Clique no botão para saber a sua estação climática.`
-                        }
-                        <div>
-                            <button 
-                                onClick={this.obterLocalizacao}
-                                className="btn btn-outline-primary w-100 mt-2">Qual a minha estação?
-                            </button>
-                            <button 
-                                onClick={() => {
-                                    ReactDOM.unmountComponentAtNode(document.querySelector('#root'))
-                                }}
-                                className="btn btn-outline-danger w-100 mt-2">Perigo!!!
-                            </button>
-                            
-                        </div>
+                    {
+                      this.state.latitude ?
+                        `Coordenadas: ${this.state.latitude}, ${this.state.longitude}. Data: ${this.state.data}.`
+                      :
+                      this.state.mensagemDeErro ?
+                        `${this.state.mensagemDeErro}`
+                      :
+                        `Clique no botão para saber a sua estação climática.`
+                    }
                   </p>
                 </div>
+                {/* button.btn.btn-outline-primary.w-100.mt-2{Qual a minha estação?} */}
+                <button
+                  onClick={this.obterLocalizacao} 
+                  className="btn btn-outline-primary w-100 mt-2">
+                    Qual a minha estação?
+                </button>
+
+                {/* button.btn.btn-outline-danger.w-100.mt-2 */}
+                <button 
+                  className="btn btn-outline-danger w-100 mt-2"
+                  onClick={() => {
+                    ReactDOM.unmountComponentAtNode(document.querySelector('#root'))
+                  }}>
+                  Perigo!!!
+                </button>
               </div>
             </div>
           </div>
@@ -122,7 +138,6 @@ class App extends React.Component{
 }
 
 ReactDOM.render(
-  <App/>,
+  <App />,
   document.querySelector('#root')
 )
-
