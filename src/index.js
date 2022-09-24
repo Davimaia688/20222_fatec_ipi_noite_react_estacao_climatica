@@ -1,29 +1,41 @@
 import 'bootstrap/dist/css/bootstrap.css'
 import ReactDOM from 'react-dom'
 import React from 'react'
+import EstacaoClimatica from './EstacaoClimatica'
+import Loading from './Loading'
 
 class App extends React.Component{
   
-  constructor(props){
-    super(props)
-    console.log('construtor')
-    this.state = {
+      constructor(props){
+       super(props)
+       console.log('construtor')
+  //   // this.state = {
+  //   //   latitude: null,
+  //   //   longitude: null,
+  //   //   estacao: null,
+  //   //   data: null,
+  //   //   icone: null,
+  //   //   mensagemDeErro: null
+  //   // }
+    
+  }
+
+  state = {
       latitude: null,
       longitude: null,
       estacao: null,
       data: null,
       icone: null,
       mensagemDeErro: null
-    }
-    
+
   }
 
   obterEstacao = (data, latitude) => {
     const ano = data.getFullYear();
-    const d1 = new Date(ano , 5, 21)
-    const d2 = new Date (ano, 8, 24)
+    const d1 = new Date(ano , 5, 22)
+    const d2 = new Date (ano, 8, 22)
     const d3 = new Date (ano, 11, 22)
-    const d4 = new Date (ano, 3, 21)
+    const d4 = new Date (ano, 3, 22)
     const sul = latitude < 0
     if (data >= d1 && data < d2){
       return sul ? 'Inverno' : 'Verão'
@@ -69,6 +81,7 @@ class App extends React.Component{
 
   componentDidMount(){
     console.log("componentDidMount")
+    this.obterLocalizacao()
   }
 
   componentDidUpdate(){
@@ -87,49 +100,25 @@ class App extends React.Component{
         <div className="row justify-content-center">
           {/* .col-md-8 */}
           <div className="col-md-8">
-            {/* .card>.card-body   */}
-            <div className="card">
-              <div className="card-body">
-                {/* .d-flex.align-items-center.border.rounded.mb-2 */}
-                <div className="d-flex align-items-center border rounded mb-2" style={{height: '6rem'}}>
-                  {/* i.fas.fa-5x */}
-                  <i className={`fas fa-5x ${this.state.icone}`}></i>
-                  {/* p.w-75.ms-3.text-center.fs-1 */}
-                  <p className="w-75 ms-3 text-center fs-1">
-                    {this.state.estacao}
-                  </p>
-                </div>
-                {/* div>p.text-center */}
-                <div>
-                  <p className="text-center">
-                    {
-                      this.state.latitude ?
-                        `Coordenadas: ${this.state.latitude}, ${this.state.longitude}. Data: ${this.state.data}.`
-                      :
-                      this.state.mensagemDeErro ?
-                        `${this.state.mensagemDeErro}`
-                      :
-                        `Clique no botão para saber a sua estação climática.`
-                    }
-                  </p>
-                </div>
-                {/* button.btn.btn-outline-primary.w-100.mt-2{Qual a minha estação?} */}
-                <button
-                  onClick={this.obterLocalizacao} 
-                  className="btn btn-outline-primary w-100 mt-2">
-                    Qual a minha estação?
-                </button>
-
-                {/* button.btn.btn-outline-danger.w-100.mt-2 */}
-                <button 
-                  className="btn btn-outline-danger w-100 mt-2"
-                  onClick={() => {
-                    ReactDOM.unmountComponentAtNode(document.querySelector('#root'))
-                  }}>
-                  Perigo!!!
-                </button>
-              </div>
-            </div>
+            {
+              (!this.state.mensagemDeErro && !this.state.latitude) ?
+               <Loading/>
+              :
+              this.state.mensagemDeErro ?
+                <p className="border.roudend. p-2. fs-1">
+                  É preciso dar permissão para acesso à localização.
+                </p>
+              :
+              <EstacaoClimatica
+                icone={this.state.icone}
+                estacao={this.state.estacao}
+                latitude={this.state.latitude}
+                longitude={this.state.longitude}
+                //data={this.state.data}
+                //mensagemDeErro={this.state.mensagemDeErro}
+                obterLocalizacao={this.obterLocalizacao}
+              /> 
+            }
           </div>
         </div>
       </div> 
@@ -141,3 +130,4 @@ ReactDOM.render(
   <App />,
   document.querySelector('#root')
 )
+
